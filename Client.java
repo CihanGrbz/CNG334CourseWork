@@ -61,8 +61,7 @@ public class Client {
 
 			// TODO open file to read and send as argument
 			// In it's current state, the client will only send a word to search for
-			// In the second part of the assignment, proper modifications will be done to
-			// open up a directory and read files
+			// In the second part of the assignment, proper modifications will be done to open up a directory and read files
 
 			try {
 				// Write the word to the output stream so the server can read it
