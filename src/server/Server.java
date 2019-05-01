@@ -17,7 +17,6 @@ public class Server {
 	DataInputStream din;
 	DataOutputStream dout;
 	String word;
-	int result;
 	///File file;
 	boolean running = true;
 	
@@ -29,7 +28,7 @@ public class Server {
 
 	public Server() {
 		try {
-			// Initialize the server socket to port 7878 and open a socket for client
+			// Initialize the server socket to port 1234 and open a socket for client
 			// connections
 			// and initialize input/output streams for client communication
 			ss = new ServerSocket(1234);
@@ -61,12 +60,15 @@ public class Server {
 
 				// Read input from client
 				word = din.readUTF();
-
+				
 				// Start file handler threads and get result
-				result = startSearch();
-
+				int result = startSearch(word);
+				
+				System.out.print("Server found ");
+				System.out.println(result);
 				// Send back result to the client
-				dout.writeInt(result);
+				dout.flush();dout.writeInt(result);
+				
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -75,33 +77,39 @@ public class Server {
 		}
 	}
 	
-	public int startSearch() {
+	public int startSearch(String w) {
 		// TODO given a directory name, get a list of all text files within the directory and send it to search handler
 		// TODO use SearchHandler in order to start searching and managing the FileHandler
 		
 		// Instead, for now the server will manually let the FileHandler run some pseudo-threads		
 		
-		int result = 0;
+		int total = 0;
 		
 		// Generate a random amount of threads to imitate a pseudo amount of text files in a directory
 		int randomFiles = (int) (Math.random()*51 + 15);
 		System.out.print("Number of files found: ");
 		System.out.println(randomFiles);
 		
-		for(int i = 0; i < randomFiles; i++) {
-			FileHandler f = new FileHandler();
+		
+		// OVERWRITE CHANGES HERE, TEMPORARY CHANGE FOR TESTING FILEHANDLER
+		for(int i = 0; i < 1; i++) {
+			FileHandler f = new FileHandler("C:/Users/musta/Desktop/test.txt", w);
 			files.add(f); 
 			f.countWords();
 		}
 		
 		// TODO wait for all threads to finish before counting
-		
-		
-		for (FileHandler fileH : files) {
-			result = result + fileH.getCount();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		
-		return result;
+		for (FileHandler fileH : files) {
+			total = total + fileH.getCount();
+		}
+		
+		return total;
 	}
 
 }

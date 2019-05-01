@@ -67,6 +67,8 @@ public class Client {
 			try {
 				// Write the word to the output stream so the server can read it
 				dout.writeUTF(word);
+				dout.flush();
+				
 
 				// While there is no response from the Server, do nothing.
 				// Check only every 10ms to prevent too much CPU draining in busy waiting
