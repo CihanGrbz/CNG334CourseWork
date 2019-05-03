@@ -11,16 +11,13 @@ import java.util.Scanner;
 
 public class Server {
 
-	// Variables needed
+	// Variables needed for the Server
 	ServerSocket ss;
 	Socket socket;
 	DataInputStream din;
 	DataOutputStream dout;
-	String word;
-	///File file;
-	boolean running = true;
 	
-	ArrayList<FileHandler> files = new ArrayList<FileHandler>();
+	boolean running = true;	
 
 	public static void main(String args[]) {
 		new Server();
@@ -58,58 +55,26 @@ public class Server {
 					}
 				}
 
-				// Read input from client
-				word = din.readUTF();
+				// TODO Read 3 inputs from client
+				String directory = "C:/Users/musta/Desktop/test.txt";
+				String word = din.readUTF();
+				int maxT = 10;
 				
+				SearchHandler searcher = new SearchHandler(directory, word, maxT);
 				// Start file handler threads and get result
-				int result = startSearch(word);
+				int result = searcher.startSearch();				
 				
 				System.out.print("Server found ");
 				System.out.println(result);
 				// Send back result to the client
-				dout.flush();dout.writeInt(result);
-				
+				dout.writeInt(result);
+				dout.flush();
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
 		}
-	}
-	
-	public int startSearch(String w) {
-		// TODO given a directory name, get a list of all text files within the directory and send it to search handler
-		// TODO use SearchHandler in order to start searching and managing the FileHandler
-		
-		// Instead, for now the server will manually let the FileHandler run some pseudo-threads		
-		
-		int total = 0;
-		
-		// Generate a random amount of threads to imitate a pseudo amount of text files in a directory
-		int randomFiles = (int) (Math.random()*51 + 15);
-		System.out.print("Number of files found: ");
-		System.out.println(randomFiles);
-		
-		
-		// OVERWRITE CHANGES HERE, TEMPORARY CHANGE FOR TESTING FILEHANDLER
-		for(int i = 0; i < 1; i++) {
-			FileHandler f = new FileHandler("C:/Users/musta/Desktop/test.txt", w);
-			files.add(f); 
-			f.countWords();
-		}
-		
-		// TODO wait for all threads to finish before counting
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		for (FileHandler fileH : files) {
-			total = total + fileH.getCount();
-		}
-		
-		return total;
 	}
 
 }

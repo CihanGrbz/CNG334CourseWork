@@ -11,14 +11,11 @@ import java.util.Scanner;
 
 public class Client {
 
-	// Variables needed
+	// Variables needed for the client
 	Socket socket;
 	DataInputStream din;
 	DataOutputStream dout;
-	String word;
-	// File file;
-	int result;
-
+	
 	boolean running = true;
 
 	public static void main(String args[]) {
@@ -47,9 +44,8 @@ public class Client {
 	public void listenForInput() {
 		Scanner sc = new Scanner(System.in);
 		while (running) {
-			// Wait until client enters a word to search for
+			// Wait until user enters a word to search for
 			// Check only every half second to prevent too much CPU draining in busy waiting
-
 			while (!sc.hasNextLine()) {
 				try {
 					Thread.sleep(500);
@@ -58,14 +54,12 @@ public class Client {
 				}
 			}
 
-			word = sc.nextLine();
-
-			// TODO open file to read and send as argument
-			// In it's current state, the client will only send a word to search for
-			// In the second part of the assignment, proper modifications will be done to open up a directory and read files
+			// The user will enter his input in this format: "path/../directory   word   maxthread" as a single string
+			String word = sc.nextLine();
 
 			try {
-				// Write the word to the output stream so the server can read it
+				// Write the user's input to the output stream so the server can read it
+				// Let Server worry about separating the 3 inputs
 				dout.writeUTF(word);
 				dout.flush();
 				
@@ -83,7 +77,7 @@ public class Client {
 				}
 
 				// Read response from server
-				result = din.readInt();
+				int result = din.readInt();
 
 				// Present result to the user
 				System.out.print("The total wordcount is: ");
