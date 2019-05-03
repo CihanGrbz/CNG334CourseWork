@@ -2,12 +2,9 @@ package server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Server {
 
@@ -41,7 +38,6 @@ public class Server {
 
 	public void listenForClient() {
 		while (running) {
-
 			try {
 				// While there is no input from the Client, do nothing.
 				// Check only every 10ms to prevent too much CPU draining in busy waiting
@@ -55,17 +51,20 @@ public class Server {
 					}
 				}
 
-				// TODO Read 3 inputs from client
-				String directory = "C:/Users/musta/Desktop/test.txt";
-				String word = din.readUTF();
-				int maxT = 10;
+				// Read input from the client, and split them by space into 3; directory - word - maxthreadcount
+				String[] clientInput = din.readUTF().split(" ");
 				
+				// Splitting the inputs accordingly
+				String directory = clientInput[0];
+				String word = clientInput[1];
+				int maxT = Integer.parseInt(clientInput[2]);
+				
+				// Create a SearchHandler with the arguments
 				SearchHandler searcher = new SearchHandler(directory, word, maxT);
-				// Start file handler threads and get result
-				int result = searcher.startSearch();				
 				
-				System.out.print("Server found ");
-				System.out.println(result);
+				// Start file handler threads and get result
+				int result = searcher.startSearch();
+				
 				// Send back result to the client
 				dout.writeInt(result);
 				dout.flush();

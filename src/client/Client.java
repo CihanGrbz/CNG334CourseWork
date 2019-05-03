@@ -3,7 +3,6 @@ package client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -43,6 +42,7 @@ public class Client {
 
 	public void listenForInput() {
 		Scanner sc = new Scanner(System.in);
+		System.out.println("INPUT FORMAT: directorypath/directory word maxThread \nNO ERROR HANDLING DONE YET");
 		while (running) {
 			// Wait until user enters a word to search for
 			// Check only every half second to prevent too much CPU draining in busy waiting

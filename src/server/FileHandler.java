@@ -1,25 +1,22 @@
 package server;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.Socket;
 
 public class FileHandler extends Thread {
 
 	// Variables that a FileHandler needs to keep track of
 	private Thread t;	// Its active thread
 	private SearchHandler sh;	// The SearchHandler it belongs to
-	private String fileName;	// The file it is searching in
+	private File file;	// The file it is searching in
 	private String word;	// The word it is searching for
 
 	
-	public FileHandler(String f, String w ,SearchHandler s) {
-		this.fileName = f;
+	public FileHandler(File f, String w ,SearchHandler s) {
+		this.file = f;
 		this.word = w.toLowerCase(); // For non-case-sensitive search, make it all lower case
 		this.sh = s; // Keep track of the SearchHandler that send out this thread
 	}
@@ -35,8 +32,7 @@ public class FileHandler extends Thread {
 	public void run() {
 		// Given a filename, open a FileReader and immediately a BufferedReader
 		try {
-			File file = new File(this.fileName);
-			FileReader freader = new FileReader(file);
+			FileReader freader = new FileReader(this.file);
 			BufferedReader reader = new BufferedReader(freader);			
 			
 			String line;
