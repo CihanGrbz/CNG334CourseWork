@@ -21,7 +21,9 @@ public class SearchHandler {
 	
 	// The function that the threads will call in a critical section
 	public void incrementWord() {
-		this.wordCount++;
+		synchronized (this) {
+			this.wordCount++;
+		}
 	}
 	
 	// This method will open the directory, and return an array of files that end with .txt

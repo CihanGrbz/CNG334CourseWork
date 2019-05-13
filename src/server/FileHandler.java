@@ -46,7 +46,6 @@ public class FileHandler extends Thread {
 				// Compare each word to the original and increment counter if it contains the word				
 				for (String word:words) {
 					if (word.toLowerCase().contains(this.word)) {
-						// TODO PART 3 synchronize increment, critical section
 						sh.incrementWord();
 					}
 				}
